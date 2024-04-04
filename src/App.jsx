@@ -1,21 +1,45 @@
 import * as React from "react";
 import Carousel from "react-bootstrap/Carousel";
-import vid1 from "./assets/Dasturiy_Injiniring_HD.mp4";
-import vid2 from "./assets/Hamshiralik_Ishi.mp4";
-import vid3 from "./assets/Tokarlik_Kasbi_uchun.mp4";
 import "./App.css";
 import ReactPlayer from "react-player";
 
 export default function App() {
-  let arr = [vid1, vid2, vid3];
+  const [mainIndex, setMainIndex] = React.useState(0);
+  const [arr, setArr] = React.useState([]);
+
+  function handleSelect(e) {
+    setMainIndex(e);
+  }
+
+  React.useEffect(() => {
+    fetch("http://192.168.101.222:8000/videos", {
+      method: "GET",
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setArr(data);
+      });
+  }, []);
+
   return (
     <div className="containers">
       <div className="carouselContainer">
-        <Carousel className="mainCarousel" interval={null}>
+        <Carousel
+          className="mainCarousel"
+          interval={null}
+          onSelect={handleSelect}
+        >
           {arr.map((element, index) => {
             return (
               <Carousel.Item key={index} className="item">
-                <ReactPlayer className="itemImg" controls url={element} />
+                <ReactPlayer
+                  className="itemImg"
+                  controls
+                  url={element.file}
+                  muted={mainIndex !== index}
+                />
               </Carousel.Item>
             );
           })}
