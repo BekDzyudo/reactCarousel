@@ -12,7 +12,7 @@ export default function App() {
   }
 
   React.useEffect(() => {
-    fetch("http://192.168.101.222:8000/videos", {
+    fetch(`http://192.168.101.222:8000/videos`, {
       method: "GET",
     })
       .then((res) => {
